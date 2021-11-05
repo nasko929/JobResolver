@@ -1,10 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <link th:href="@{/css/main.css}" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <title>Job Opportunities</title>
 </head>
 <body>
-    <span th:text="${jobSource + ' : ' + numberOfJobOpportunities}"></span>
+    <div class="table-container">
+        <h1 class="title" th:text="${'Job Source: ' + jobSource}"></h1>
+        <div class="scrollable-table" th:if="${numberOfJobOpportunities != 0}">
+            <table>
+                <col span="1" style="width: 20%;">
+                <col span="1" style="width: 20%;">
+                <col span="1" style="width: 20%;">
+                <col span="1" style="width: 40%;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Company Name</th>
+                        <th>Job Title</th>
+                        <th>Job Url</th>
+                    </tr>
+                </thead>
+                <tr th:each="jobOpportunity : ${jobOpportunities}">
+                    <td th:text="${jobOpportunity.id}"></td>
+                    <td th:text="${jobOpportunity.companyName}"></td>
+                    <td th:text="${jobOpportunity.jobTitle}"></td>
+                    <td th:text="${jobOpportunity.jobUrl}" class="short-url"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

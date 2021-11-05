@@ -9,20 +9,20 @@
         <title>Job Boards</title>
     </head>
     <body>
-        <p class="title">Job Sources</p>
+        <h1 class="title">Job Sources</h1>
         <div class="container">
             <th:block th:each="jobBoard, status: ${jobBoards}">
-                <div class="jobProvider" th:id="'jobProvider.' + ${jobBoard.id}">
+                <div class="job-provider" th:id="'jobProvider.' + ${jobBoard.id}">
                     <div class="rating">
                         <span th:text="${jobBoard.rating}"
-                              th:classappend="${jobBoard.rating == 'Okay'} ? okayColor : (${jobBoard.rating == 'Good'} ? goodColor : greatColor)"></span>
+                              th:classappend="${jobBoard.rating == 'Okay'} ? okay-color : (${jobBoard.rating == 'Good'} ? good-color : great-color)"></span>
                     </div>
-                    <div class="jobProviderContent">
-                        <div class="imagePart">
-                            <img th:src="@{${jobBoard.logoFile}}" class="logoDisplay">
+                    <div class="job-provider-content">
+                        <div class="image-part">
+                            <img th:src="@{${jobBoard.logoFile}}" class="logo-display">
                         </div>
-                        <div class="descriptionPart">
-                            <span class="descriptionText" th:text="${jobBoard.description}"></span>
+                        <div class="description-part">
+                            <span class="description-text" th:text="${jobBoard.description}"></span>
                         </div>
                     </div>
                 </div>

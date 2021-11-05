@@ -1,10 +1,17 @@
-th, td {
-  border: 1px solid black;
-  margin: 5% 10%;
-  width: 20%;
-  height: 220px;
-  border-radius: 15px;
-  background-color: white;
+table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+
+tr {
+    border-bottom: 1px solid #F2F4F7;
+    height: 56px;
+}
+
+th {
+    text-align: left;
+    font-weight: 900;
 }
 
 body {
@@ -27,7 +34,32 @@ body {
     justify-content: space-between;
 }
 
-.jobProvider {
+.short-url {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.table-container {
+    margin: 2% 3%;
+    padding: 20px 5%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color: white;
+}
+
+.scrollable-table {
+    overflow-y: scroll;
+    height: 80vh;
+}
+
+.table-container h1 {
+    margin: 50px 0 16px 0;
+    font-size: 24px;
+}
+
+.job-provider {
     flex-basis: 29%;
     display: flex;
     flex-direction: column;
@@ -42,51 +74,51 @@ body {
     cursor: pointer;
 }
 
-.jobProvider:hover {
+.job-provider:hover {
     box-shadow: 0px -1px 15px -1px rgba(0,0,0,0.42);
     -webkit-box-shadow: 0px -1px 15px -1px rgba(0,0,0,0.42);
     -moz-box-shadow: 0px -1px 15px -1px rgba(0,0,0,0.42);
 }
 
-.jobProvider .rating {
+.job-provider .rating {
     display: flex;
     justify-content: flex-end;
     font-size: 12px;
 }
 
-.jobProviderContent {
+.job-provider-content {
     display: flex;
     margin-bottom: 24px;
 }
 
-.imagePart {
+.image-part {
     width: 20%;
     height: auto;
 }
 
-.logoDisplay {
+.logo-display {
     width: 100%;
     height: auto;
 }
 
-.descriptionPart {
+.description-part {
     width: 80%;
     height: auto;
     padding: 8px 16px;
 }
 
-.descriptionText {
+.description-text {
     font-size: 16px;
 }
 
-.greatColor {
+.great-color {
     color: #61db51
 }
 
-.goodColor {
+.good-color {
     color: #4a89d6
 }
 
-.okayColor {
+.okay-color {
     color: #b756f7
 }
