@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8">
+        <link th:href="@{/css/main.css}" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+        <title>Job Boards</title>
+    </head>
+    <body>
+        <p class="title">Job Sources</p>
+        <div class="container">
+            <th:block th:each="jobBoard, status: ${jobBoards}">
+                <div class="jobProvider" th:id="'jobProvider.' + ${jobBoard.id}">
+                    <div class="rating">
+                        <span th:text="${jobBoard.rating}"
+                              th:classappend="${jobBoard.rating == 'Okay'} ? okayColor : (${jobBoard.rating == 'Good'} ? goodColor : greatColor)"></span>
+                    </div>
+                    <div class="jobProviderContent">
+                        <div class="imagePart">
+                            <img th:src="@{${jobBoard.logoFile}}" class="logoDisplay">
+                        </div>
+                        <div class="descriptionPart">
+                            <span class="descriptionText" th:text="${jobBoard.description}"></span>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </body>
+    <script>
+        let element = document.querySelector(".container");
+
+        element.addEventListener("click", (event) => {
+
+            let element = event.target;
+            if (element.classList.contains("container")) {
+                return;
+            }
+
+            while (!element.getAttribute("id")) {
+                element = element.parentElement;
+            }
+            let id = element.getAttribute("id").split(".")[1];
+            window.location.href = "/jobOpportunity/" + id;
+        });
+    </script>
+</html>
