@@ -7,12 +7,15 @@ import com.jobresolver.jobresolver.model.MatchedJobOpportunity;
 import com.jobresolver.jobresolver.repository.JobBoardRepository;
 import com.jobresolver.jobresolver.repository.JobOpportunityRepository;
 import com.jobresolver.jobresolver.repository.MatchedJobOpportunityRepository;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,9 +53,22 @@ public class JobResolver {
         var jobBoards = jobBoardRepository.findAll();
         var jobOpportunities = jobOpportunityRepository.findAll();
 
+        // Resolve the job opportunities with the job boards.
         var matchedJobOpportunities = matchJobOpportunities(jobOpportunities, jobBoards);
 
         matchedJobOpportunityRepository.saveAll(matchedJobOpportunities);
+
+        // The method to generate the file is commented out, since the data is static.
+        // The file name is matched_job_opportunities.csv
+        /*
+        try {
+            writeMatchedJobOpportunitiesToCsv(matchedJobOpportunities);
+        } catch (Exception e) {
+            log.info("Unsuccessful creation of CSV file. Check logs.");
+            e.printStackTrace();
+        }
+
+         */
     }
 
     public List<MatchedJobOpportunity> matchJobOpportunities(List<JobOpportunity> jobOpportunities,
@@ -64,7 +80,7 @@ public class JobResolver {
             var matchedJobOpportunity = new MatchedJobOpportunity(jobOpportunity.getId(), jobOpportunity.getJobTitle(),
                     jobOpportunity.getCompanyName(), jobOpportunity.getJobUrl());
 
-            // If we are lacking job url, we default to UNKNOWN.
+            // If we are lacking the job url, we default to UNKNOWN.
             if (jobOpportunity.getJobUrl() == null || jobOpportunity.getJobUrl().length() == 0) {
                 matchedJobOpportunity.setJobSource(UNKNOWN);
                 matchedJobOpportunities.add(matchedJobOpportunity);
@@ -73,21 +89,40 @@ public class JobResolver {
 
             String urlPartToCheck = getUrlPart(jobOpportunity.getJobUrl());
 
+            // If we lack subdomain and/or domain, we default to UNKNOWN.
             if (urlPartToCheck == null) {
                 matchedJobOpportunity.setJobSource(UNKNOWN);
                 matchedJobOpportunities.add(matchedJobOpportunity);
                 continue;
             }
 
-            String jobBoard = matchJobUrlToJobBoard(jobBoards, urlPartToCheck);
-            matchedJobOpportunity.setJobSource(jobBoard);
+            // Try to match the URL to job board.
+            String jobSource = matchJobUrlToJobBoard(jobBoards, urlPartToCheck);
 
+            // Then, we try with Company name.
+            if (jobSource.equals(UNKNOWN)) {
+                jobSource = matchJobUrlToCompanyName(urlPartToCheck, jobOpportunity.getCompanyName());
+            }
+
+            // Set the jobSource and add the matched opportunity.
+            matchedJobOpportunity.setJobSource(jobSource);
             matchedJobOpportunities.add(matchedJobOpportunity);
         }
 
         return matchedJobOpportunities;
     }
 
+    private String matchJobUrlToCompanyName(String urlPartToCheck, String companyName) {
+        return (urlPartToCheck.toLowerCase().contains(companyName.toLowerCase())) ? "Company Website" : UNKNOWN;
+    }
+
+    /**
+     * Extracts the subdomain and domain part of the URL.
+     * @param jobUrl - the URL to be extracted from
+     *
+     * @return - extracted subdomain and domain.
+     *
+     */
     private String getUrlPart(String jobUrl) {
 
         String[] urlParts = jobUrl.split("/");
@@ -113,4 +148,17 @@ public class JobResolver {
 
         return UNKNOWN;
     }
+
+    private void writeMatchedJobOpportunitiesToCsv(List<MatchedJobOpportunity> matchedJobOpportunities) throws Exception {
+
+        FileWriter writer = new FileWriter("matched_job_opportunities.csv");
+
+        // Write matched jobs to csv.
+        StatefulBeanToCsv<MatchedJobOpportunity> beanToCsv =
+                new StatefulBeanToCsvBuilder<MatchedJobOpportunity>(writer).build();
+        beanToCsv.write(matchedJobOpportunities);
+
+        writer.close();
+    }
+
 }

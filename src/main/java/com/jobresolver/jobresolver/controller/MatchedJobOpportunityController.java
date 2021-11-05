@@ -22,7 +22,6 @@ public class MatchedJobOpportunityController {
         StringBuilder jobSourceName = new StringBuilder();
         var matchedJobOpportunities = matchedJobOpportunityService.getJobOpportunitiesByJobBoardId(id, jobSourceName);
         model.addAttribute("jobOpportunities", matchedJobOpportunities);
-        model.addAttribute("numberOfJobOpportunities", matchedJobOpportunities.size());
         model.addAttribute("jobSource", jobSourceName.toString());
 
         return "jobOpportunities";

@@ -1,12 +1,16 @@
 package com.jobresolver.jobresolver.model;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "JOB_BOARDS")
 public class JobBoard {
 

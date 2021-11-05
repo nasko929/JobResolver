@@ -1,5 +1,6 @@
 package com.jobresolver.jobresolver.model;
 
+import com.opencsv.bean.CsvBindByName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,14 +15,19 @@ import javax.persistence.Table;
 public class MatchedJobOpportunity {
 
     @Id
+    @CsvBindByName(column = "ID (Primary Key)")
     private Long id;
 
+    @CsvBindByName(column = "Job Title")
     private String jobTitle;
 
+    @CsvBindByName(column = "Company Name")
     private String companyName;
 
+    @CsvBindByName(column = "Job URL")
     private String jobUrl;
 
+    @CsvBindByName(column = "Job Source")
     private String jobSource;
 
     public MatchedJobOpportunity(Long id, String jobTitle, String companyName, String jobUrl) {
