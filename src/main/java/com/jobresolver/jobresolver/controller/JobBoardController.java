@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/jobBoards")
 public class JobBoardController {
 
     private final JobBoardRepository jobBoardRepository;
